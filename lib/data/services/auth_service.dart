@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:shartflix/data/services/log_service.dart';
 import 'dio_client.dart';
 
 class AuthService {
@@ -22,11 +23,11 @@ class AuthService {
       final String? token = responseData['data']?['token']?.toString();
 
       if (token == null || token.isEmpty) {
-        print('⚠️ TOKEN BULUNAMADI! Yanıt: $responseData');
+        LogService.d(' TOKEN BULUNAMADI! Yanıt: $responseData');
         throw Exception('Giriş başarılı ama token alınamadı');
       }
 
-      print('🔑 LOGIN BAŞARILI - TOKEN: $token');
+      LogService.i('🔑 LOGIN BAŞARILI - TOKEN: $token');
       return token;
     } on DioException catch (e) {
       final errorMessage =
@@ -36,7 +37,7 @@ class AuthService {
   }
 
   Future<String> register(String name, String email, String password) async {
-    print('--- REGISTER FONKSİYONU ÇAĞIRILDI ---');
+    LogService.d('--- REGISTER FONKSİYONU ÇAĞIRILDI ---');
     try {
       final response = await _dio.post(
         '/user/register',
@@ -52,11 +53,11 @@ class AuthService {
       final String? token = responseData['data']?['token']?.toString();
 
       if (token == null || token.isEmpty) {
-        print('❌ TOKEN BULUNAMADI! Yanıt: $responseData');
+        LogService.w('TOKEN BULUNAMADI! Yanıt: $responseData');
         throw Exception('Kayıt başarılı ama token alınamadı');
       }
 
-      print('✅ KAYIT BAŞARILI - TOKEN ALINDI: $token');
+      LogService.i(' KAYIT BAŞARILI - TOKEN ALINDI: $token');
       return token;
     } on DioException catch (e) {
       final errorMessage =

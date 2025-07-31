@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shartflix/data/services/log_service.dart';
 import 'package:shartflix/presentation/register/bloc/register_bloc.dart';
 import 'package:shartflix/presentation/register/bloc/register_event.dart';
 import 'package:shartflix/presentation/register/bloc/register_state.dart';
@@ -42,7 +43,7 @@ class AgreementCheckbox extends StatelessWidget {
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
                         
-                          print('Kullanıcı sözleşmesi tıklandı.');
+                          LogService.i('Kullanıcı sözleşmesi tıklandı.');
                         },
                     ),
                   ],

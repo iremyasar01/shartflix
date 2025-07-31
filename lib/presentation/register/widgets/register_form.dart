@@ -42,8 +42,9 @@ class _RegisterFormState extends State<RegisterForm> {
           );
             // 2 saniye sonra giriş sayfasına yönlendir
           Future.delayed(const Duration(seconds: 2), () {
-           
+             if (mounted) {
             Navigator.of(context).pushReplacementNamed('/login');
+          }
           });
         }
 
