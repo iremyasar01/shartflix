@@ -6,7 +6,6 @@ import 'package:shartflix/domain/entities/user_entity.dart';
 import 'package:shartflix/presentation/common_widgets/error_message.dart';
 import 'package:shartflix/presentation/profile/bloc/profile_bloc.dart';
 
-
 class AddPhotoScreen extends StatefulWidget {
   final UserEntity user;
 
@@ -24,117 +23,141 @@ class _AddPhotoScreenState extends State<AddPhotoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profil Fotoğrafı'),
-      ),
-      body: BlocListener<ProfileBloc, ProfileState>(
-        listener: (context, state) {
-          if (state is ProfileLoadedState) {
-            Navigator.pop(context);
-          } else if (state is ProfileErrorState) {
-            setState(() {
-              _errorMessage = state.message;
-              _isUploading = false;
-            });
-          }
-        },
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            children: [
-              if (_errorMessage != null)
-                ErrorMessage(message: _errorMessage!),
-              
-              const SizedBox(height: 24),
-              
-              _buildImagePreview(),
-              
-              const SizedBox(height: 32),
-              
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _buildPhotoOptionButton(
-                    icon: Icons.photo_library,
-                    label: 'Galeri',
-                    onPressed: () => _pickImage(ImageSource.gallery),
+      backgroundColor: Colors.black,
+      body: SafeArea(
+        child: BlocListener<ProfileBloc, ProfileState>(
+          listener: (context, state) {
+            if (state is ProfileLoadedState) {
+              Navigator.pop(context);
+            } else if (state is ProfileErrorState) {
+              setState(() {
+                _errorMessage = state.message;
+                _isUploading = false;
+              });
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Column(
+              children: [
+                const SizedBox(height: 20),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: InkWell(
+                    onTap: () => Navigator.pop(context),
+                    child: const CircleAvatar(
+                      backgroundColor: Colors.white12,
+                      child: Icon(Icons.arrow_back, color: Colors.white),
+                    ),
                   ),
-                  _buildPhotoOptionButton(
-                    icon: Icons.camera_alt,
-                    label: 'Kamera',
-                    onPressed: () => _pickImage(ImageSource.camera),
-                  ),
-                ],
-              ),
-              
-              const SizedBox(height: 32),
-              
-              if (_selectedImage != null)
-                _buildActionButtons(),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildImagePreview() {
-    return Container(
-      width: 200,
-      height: 200,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade300),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: _selectedImage != null
-          ? Image.file(_selectedImage!, fit: BoxFit.cover)
-          : widget.user.photoUrl != null && widget.user.photoUrl!.isNotEmpty
-              ? Image.network(widget.user.photoUrl!, fit: BoxFit.cover)
-              : const Center(
-                  child: Icon(Icons.person, size: 60, color: Colors.grey),
                 ),
-    );
-  }
-
-  Widget _buildPhotoOptionButton({
-    required IconData icon,
-    required String label,
-    required VoidCallback onPressed,
-  }) {
-    return Column(
-      children: [
-        IconButton(
-          icon: Icon(icon, size: 40),
-          onPressed: _isUploading ? null : onPressed,
-        ),
-        const SizedBox(height: 8),
-        Text(label),
-      ],
-    );
-  }
-
-  Widget _buildActionButtons() {
-    return Column(
-      children: [
-        ElevatedButton(
-          onPressed: _isUploading ? null : _uploadPhoto,
-          style: ElevatedButton.styleFrom(
-            minimumSize: const Size(200, 50),
+                const SizedBox(height: 16),
+                const Text(
+                  'Profil Detayı',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  'Fotoğraflarınızı Yükleyin',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Resources out incentivize\nrelaxation floor loss cc.',
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 13,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 32),
+                _buildImageBox(),
+                const SizedBox(height: 32),
+                if (_errorMessage != null)
+                  ErrorMessage(message: _errorMessage!),
+                const Spacer(),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _isUploading ? null : _onContinuePressed,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    child: _isUploading
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : const Text(
+                            'Devam Et',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
           ),
-          child: _isUploading
-              ? const CircularProgressIndicator(color: Colors.white)
-              : const Text('Fotoğrafı Yükle'),
         ),
-        const SizedBox(height: 16),
-        OutlinedButton(
-          onPressed: _isUploading ? null : () => setState(() {
-            _selectedImage = null;
-            _errorMessage = null;
-          }),
-          child: const Text('Seçimi İptal Et'),
-        ),
-      ],
+      ),
     );
+  }
+
+  Widget _buildImageBox() {
+    return GestureDetector(
+      onTap: _isUploading ? null : () => _pickImage(ImageSource.gallery),
+      child: Container(
+        width: 140,
+        height: 140,
+        decoration: BoxDecoration(
+          color: Colors.grey[900],
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: _selectedImage != null
+            ? ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Image.file(_selectedImage!, fit: BoxFit.cover),
+              )
+            : widget.user.photoUrl != null && widget.user.photoUrl!.isNotEmpty
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: Image.network(widget.user.photoUrl!, fit: BoxFit.cover),
+                  )
+                : const Center(
+                    child: Icon(Icons.add, color: Colors.white54, size: 40),
+                  ),
+      ),
+    );
+  }
+
+  void _onContinuePressed() {
+    if (_selectedImage == null) {
+      setState(() {
+        _errorMessage = 'Lütfen bir fotoğraf seçin';
+      });
+      return;
+    }
+
+    setState(() {
+      _isUploading = true;
+      _errorMessage = null;
+    });
+
+    context.read<ProfileBloc>().add(
+          UpdateProfilePhotoEvent(_selectedImage!),
+        );
   }
 
   Future<void> _pickImage(ImageSource source) async {
@@ -151,7 +174,6 @@ class _AddPhotoScreenState extends State<AddPhotoScreen> {
         final file = File(pickedFile.path);
         final fileSize = await file.length();
 
-        // Dosya boyutu kontrolü (max 5MB)
         if (fileSize > 5 * 1024 * 1024) {
           setState(() {
             _errorMessage = 'Fotoğraf boyutu çok büyük (max 5MB)';
@@ -170,23 +192,5 @@ class _AddPhotoScreenState extends State<AddPhotoScreen> {
         _errorMessage = 'Fotoğraf seçilemedi: ${e.toString()}';
       });
     }
-  }
-
-  void _uploadPhoto() {
-    if (_selectedImage == null) {
-      setState(() {
-        _errorMessage = 'Lütfen bir fotoğraf seçin';
-      });
-      return;
-    }
-
-    setState(() {
-      _isUploading = true;
-      _errorMessage = null;
-    });
-
-    context.read<ProfileBloc>().add(
-          UpdateProfilePhotoEvent(_selectedImage!),
-        );
   }
 }
