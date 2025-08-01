@@ -10,23 +10,35 @@ class ErrorMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Eğer gösterilecek bir mesaj varsa, onu stilize edilmiş bir
-    // Text widget'ı içinde göster.
     if (message != null && message!.isNotEmpty) {
       return Padding(
-        padding: const EdgeInsets.only(top: 16.0),
-        child: Text(
-          message!,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.red.shade300,
-            fontSize: 14,
+        padding: const EdgeInsets.only(bottom: 16.0),
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.red.shade50,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: Colors.red.shade200),
+          ),
+          child: Row(
+            children: [
+              const Icon(Icons.error_outline, color: Colors.red, size: 24),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  message!,
+                  style: TextStyle(
+                    color: Colors.red.shade700,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       );
     }
 
-    // Gösterilecek bir mesaj yoksa, yer kaplamayan boş bir widget döndür.
     return const SizedBox.shrink();
   }
 }

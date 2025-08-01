@@ -41,6 +41,10 @@ dependencies:
   flutter_secure_storage: ^9.2.4
   flutter_launcher_icons: ^0.14.4
   logger: ^2.6.0
+  image_picker: ^1.1.2
+  cached_network_image: ^3.4.1
+  get_it: ^8.1.0
+  flutter_image_compress: ^2.4.0
 
 
 dev_dependencies:
