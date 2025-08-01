@@ -6,7 +6,6 @@ import 'package:shartflix/injection_container.dart' as di;
 import 'package:shartflix/presentation/auth/auth_wrapper.dart';
 import 'package:shartflix/presentation/home/home_screen.dart';
 import 'package:shartflix/presentation/login/screens/login_screen.dart';
-import 'package:shartflix/presentation/profile/screens/profile_screen.dart';
 import 'package:shartflix/presentation/register/screens/register_screen.dart';
 
 
@@ -40,7 +39,7 @@ class MyApp extends StatelessWidget {
           '/login': (context) => const LoginScreen(),
           '/register': (context) => const RegisterScreen(),
           '/home': (context) => const HomeScreen(),
-          '/profile': (context) => const ProfileScreen(),
+         // '/profile': (context) => const ProfileScreen(),
         },
         debugShowCheckedModeBanner: false,
       ),

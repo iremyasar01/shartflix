@@ -5,7 +5,10 @@ import 'package:shartflix/presentation/profile/bloc/profile_bloc.dart';
 import 'package:shartflix/presentation/profile/widgets/profile_content_view.dart'; 
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+final String? token;
+
+const ProfileScreen({super.key, required this.token});
+
 
   @override
   Widget build(BuildContext context) {

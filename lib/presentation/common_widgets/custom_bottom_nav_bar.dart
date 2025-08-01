@@ -1,56 +1,100 @@
 import 'package:flutter/material.dart';
 
-/// Uygulamanın ana sekmeleri arasında gezinmeyi sağlayan,
-/// yeniden kullanılabilir alt navigasyon barı.
 class CustomBottomNavBar extends StatelessWidget {
-  /// Hangi sekmenin aktif olduğunu belirtir (0: Anasayfa, 1: Profil vb.).
   final int currentIndex;
+  final Function(int) onTap;
 
   const CustomBottomNavBar({
     super.key,
     required this.currentIndex,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home_outlined),
-          activeIcon: Icon(Icons.home),
-          label: 'Anasayfa',
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16, left: 24, right: 24),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.circular(40),
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person_outline),
-          activeIcon: Icon(Icons.person),
-          label: 'Profil',
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _NavItem(
+              index: 0,
+              currentIndex: currentIndex,
+              label: "Anasayfa",
+              icon: Icons.home_outlined,
+              activeIcon: Icons.home,
+              onTap: onTap,
+            ),
+            _NavItem(
+              index: 1,
+              currentIndex: currentIndex,
+              label: "Profil",
+              icon: Icons.person_outline,
+              activeIcon: Icons.person,
+              onTap: onTap,
+            ),
+          ],
         ),
-      ],
-      currentIndex: currentIndex,
-      onTap: (int index) {
-        // Eğer kullanıcı zaten bulunduğu sekmenin ikonuna tıklarsa,
-        // gereksiz bir yönlendirme yapma.
-        if (index == currentIndex) return;
-
-        // Tıklanan sekmeye göre ilgili sayfaya yönlendir.
-        // pushReplacementNamed kullanmak, sayfalar arasında sonsuz bir
-        // yığın oluşmasını engeller, daha performanslıdır.
-        switch (index) {
-          case 0:
-            Navigator.pushReplacementNamed(context, '/home');
-            break;
-          case 1:
-            Navigator.pushReplacementNamed(context, '/profile');
-            break;
-        }
-      },
-      // Stil Ayarları
-      selectedItemColor: Colors.red.shade400,
-      unselectedItemColor: Colors.grey.shade500,
-      backgroundColor: Theme.of(context).bottomAppBarTheme.color,
-      type: BottomNavigationBarType.fixed, // 2'den fazla öğe olsa bile stilini korur
-      showSelectedLabels: true,
-      showUnselectedLabels: false,
+      ),
     );
   }
 }
+
+class _NavItem extends StatelessWidget {
+  final int index;
+  final int currentIndex;
+  final String label;
+  final IconData icon;
+  final IconData activeIcon;
+  final Function(int) onTap;
+
+  const _NavItem({
+    required this.index,
+    required this.currentIndex,
+    required this.label,
+    required this.icon,
+    required this.activeIcon,
+    required this.onTap,
+  });
+
+  bool get isSelected => index == currentIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => onTap(index),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+          border: Border.all(color: Colors.white24),
+          color: isSelected ? Colors.white : Colors.transparent,
+        ),
+        child: Row(
+          children: [
+            Icon(
+              isSelected ? activeIcon : icon,
+              color: isSelected ? Colors.black : Colors.white,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: TextStyle(
+                color: isSelected ? Colors.black : Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+

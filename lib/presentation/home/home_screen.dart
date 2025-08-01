@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shartflix/core/utils/storage_service.dart';
+import 'package:shartflix/presentation/common_widgets/custom_bottom_nav_bar.dart';
 import 'package:shartflix/presentation/login/screens/login_screen.dart';
 import 'package:shartflix/presentation/profile/screens/profile_screen.dart';
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -13,6 +13,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String? _userToken;
   int _selectedIndex = 0;
+  final List<Widget> _pages = []; // Will hold our pages
 
   @override
   void initState() {
@@ -25,6 +26,11 @@ class _HomeScreenState extends State<HomeScreen> {
     if (mounted) {
       setState(() {
         _userToken = token;
+        // Initialize pages after token is loaded
+        _pages.addAll([
+          _buildHomePageBody(),
+          ProfileScreen(token: _userToken), 
+        ]);
       });
     }
   }
@@ -48,13 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> pages = [
-      _buildHomePageBody(),
-      const ProfileScreen(), 
-    ];
-
     return Scaffold(
-      // SADECE ANA SAYFADA (index 0) APP BAR GÖSTER
       appBar: _selectedIndex == 0
           ? AppBar(
               title: const Text('Ana Sayfa'),
@@ -66,31 +66,18 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
               automaticallyImplyLeading: false,
             )
-          : null, // Profil sayfasında AppBar olmayacak
+          : null,
       
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: pages,
-      ),
+      body: _pages.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : IndexedStack(
+              index: _selectedIndex,
+              children: _pages,
+            ),
       
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: 'Anasayfa',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
-            label: 'Profil',
-          ),
-        ],
+      bottomNavigationBar: CustomBottomNavBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        selectedItemColor: Colors.red.shade400,
-        unselectedItemColor: Colors.grey,
-        backgroundColor: Theme.of(context).bottomAppBarTheme.color,
       ),
     );
   }
