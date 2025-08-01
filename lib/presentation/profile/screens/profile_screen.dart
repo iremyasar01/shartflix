@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shartflix/domain/repositories/profile_repository.dart';
 import 'package:shartflix/presentation/profile/bloc/profile_bloc.dart';
-import 'package:shartflix/presentation/profile/widgets/profile_header.dart';
-import 'package:shartflix/presentation/profile/widgets/profile_info_section.dart';
-import 'package:shartflix/presentation/profile/widgets/account_actions_section.dart';
+import 'package:shartflix/presentation/profile/widgets/profile_content_view.dart'; 
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -16,10 +14,7 @@ class ProfileScreen extends StatelessWidget {
         repository: context.read<ProfileRepository>(),
       )..add(LoadProfileEvent()),
       child: Scaffold(
-        //appBar: AppBar(
-          //title: const Text('Profil'),
-          //automaticallyImplyLeading: false,
-        //),
+        //backgroundColor: Colors.black, // Arka planı tasarıma uygun hale getir
         body: BlocConsumer<ProfileBloc, ProfileState>(
           listener: (context, state) {
             if (state is ProfileErrorState) {
@@ -33,24 +28,14 @@ class ProfileScreen extends StatelessWidget {
           },
           builder: (context, state) {
             if (state is ProfileLoadedState) {
-              return SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    ProfileHeader(user: state.user),
-                    const SizedBox(height: 24),
-                    ProfileInfoSection(user: state.user),
-                    const SizedBox(height: 24),
-                    AccountActionsSection(user: state.user),
-                  ],
-                ),
-              );
+              // Veri yüklendiğinde, tüm görsel yükü ProfileContentView üstlenir.
+              return ProfileContentView(user: state.user);
             }
-            return const Center(child: CircularProgressIndicator());
+            // Diğer tüm durumlarda (yükleniyor, hata, başlangıç)
+            // bir yüklenme animasyonu göster.
+            return const Center(child: CircularProgressIndicator(color: Colors.white));
           },
         ),
-        // CUSTOM BOTTOM NAVBAR GERİ EKLENDİ
-       // bottomNavigationBar: const CustomBottomNavBar(currentIndex: 1),
       ),
     );
   }
