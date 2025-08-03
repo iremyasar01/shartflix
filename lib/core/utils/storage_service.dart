@@ -1,23 +1,43 @@
-
+import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:shartflix/data/services/log_service.dart';
 
 class StorageService {
-  static const _storage = FlutterSecureStorage();
-static Future<void> saveToken(String token) async {
-  if (token.isEmpty) {
-    LogService.w('BOŞ TOKEN KAYDEDİLMEYE ÇALIŞILDI!');
-    throw Exception('Geçersiz token');
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+
+  // TOKEN İŞLEMLERİ
+  Future<void> saveToken(String token) async {
+    await _storage.write(key: 'auth_token', value: token);
   }
-  
-  await _storage.write(key: 'auth_token', value: token);
-  LogService.i('🔐 TOKEN KAYDEDİLDİ: $token');
-}
-  static Future<String?> getToken() async {
+
+  Future<String?> getToken() async {
     return await _storage.read(key: 'auth_token');
   }
 
-  static Future<void> deleteToken() async {
+  Future<void> deleteToken() async {
     await _storage.delete(key: 'auth_token');
+  }
+
+  // FAVORİ FİLM İŞLEMLERİ
+  Future<void> addFavoriteMovie(String movieId) async {
+    final favorites = await getFavoriteMovieIds();
+    if (!favorites.contains(movieId)) {
+      favorites.add(movieId);
+      await _storage.write(key: 'favorite_movies', value: json.encode(favorites));
+    }
+  }
+
+  Future<void> removeFavoriteMovie(String movieId) async {
+    final favorites = await getFavoriteMovieIds();
+    favorites.remove(movieId);
+    await _storage.write(key: 'favorite_movies', value: json.encode(favorites));
+  }
+
+  Future<List<String>> getFavoriteMovieIds() async {
+    final favoritesJson = await _storage.read(key: 'favorite_movies');
+    if (favoritesJson != null) {
+      final List<dynamic> list = json.decode(favoritesJson);
+      return list.cast<String>();
+    }
+    return [];
   }
 }

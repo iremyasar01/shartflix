@@ -38,7 +38,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     if (token.isEmpty) {
       throw Exception('Token alınamadı');
     }
-      await StorageService.saveToken(token);
+      await StorageService().saveToken(token);
       
       // BAŞARILI DURUMDA FORM VERİLERİNİ SIFIRLA
       emit(RegisterState.initial().copyWith(status: FormStatus.success));

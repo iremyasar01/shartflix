@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // Future.wait, her iki işlemin de aynı anda bitmesini bekler.
     final results = await Future.wait([
       Future.delayed(const Duration(milliseconds: 1500)),
-      StorageService.getToken(),
+      StorageService().getToken(),
     ]);
 
     // Sonuçlardan token'ı alalım (ikinci işlemin sonucuydu).

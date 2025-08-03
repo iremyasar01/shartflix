@@ -19,7 +19,7 @@ class DioClient {
           // Her istekten önce burası çalışır.
           
           // Saklanmış token'ı al
-          final token = await StorageService.getToken();
+          final token = await StorageService().getToken();
 
           if (token != null) {
             // Eğer token varsa, Authorization başlığına ekle

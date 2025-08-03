@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shartflix/core/utils/storage_service.dart';
 import 'package:shartflix/data/services/dio_client.dart';
+import 'package:shartflix/domain/repositories/movie_repository.dart';
 import 'package:shartflix/domain/repositories/profile_repository.dart';
 import 'package:shartflix/injection_container.dart' as di;
 import 'package:shartflix/presentation/auth/auth_wrapper.dart';
@@ -23,7 +25,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider(create: (context) => di.sl<ProfileRepository>()),
+        RepositoryProvider<StorageService>(create: (_) => di.sl<StorageService>()),
+        RepositoryProvider<MovieRepository>(create: (_) => di.sl<MovieRepository>()),
+        RepositoryProvider<ProfileRepository>(create: (_) => di.sl<ProfileRepository>()),
       ],
       child: MaterialApp(
         title: 'Shartflix',

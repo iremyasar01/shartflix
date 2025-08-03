@@ -16,7 +16,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
   @override
   Future<String> updateProfilePhoto(File imageFile) async {
-    final token = await StorageService.getToken();
+    final token = await StorageService().getToken();
     
     if (token == null) {
       throw Exception('Kullanıcı oturumu bulunamadı. Lütfen tekrar giriş yapın.');

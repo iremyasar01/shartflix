@@ -39,7 +39,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
     try {
       final token = await _authService.login(state.email, state.password);
-      await StorageService.saveToken(token);
+      await StorageService().saveToken(token);
       emit(state.copyWith(status: FormStatus.success));
     } catch (e) {
       emit(state.copyWith(
