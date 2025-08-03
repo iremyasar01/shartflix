@@ -4,10 +4,10 @@ class MovieModel {
   final String description;
   final String posterUrl;
   bool isFavorite;
-  final String year;
-  final String director;
-  final String actors;
-  final String production; // Yeni eklenen alan
+  final String? year;
+  final String? director;
+  final String? actors;
+  final String? production; 
 
   MovieModel({
     required this.id,
@@ -15,10 +15,10 @@ class MovieModel {
     required this.description,
     required this.posterUrl,
     this.isFavorite = false,
-    required this.year,
-    required this.director,
-    required this.actors,
-    required this.production, // Yeni eklenen alan
+     this.year,
+     this.director,
+  this.actors,
+     this.production, 
   });
 
   factory MovieModel.fromJson(Map<String, dynamic> json) {

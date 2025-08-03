@@ -105,26 +105,6 @@ class _HomeScreenState extends State<HomeScreen> {
             child: CustomScrollView(
               controller: _scrollController,
               slivers: [
-                // Başlık ve arama
-                SliverAppBar(
-                  title: const Text(
-                    'Keşfet',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  actions: [
-                    IconButton(
-                      icon: const Icon(Icons.search, size: 28),
-                      onPressed: () {},
-                    ),
-                  ],
-                  pinned: true,
-                  floating: true,
-                ),
-
-                // Tüm filmlerin grid görünümü (sonsuz kaydırma)
                 SliverPadding(
                   padding: const EdgeInsets.all(16),
                   sliver: SliverGrid(

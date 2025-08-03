@@ -1,23 +1,9 @@
 import 'package:flutter/material.dart';
-
-// Örnek bir film modeli. Bunu kendi projenizdeki modelle değiştirebilirsiniz.
-class _PlaceholderMovie {
-  final String title;
-  final String studio;
-  final String imageUrl;
-  _PlaceholderMovie(this.title, this.studio, this.imageUrl);
-}
-
+import 'package:shartflix/domain/entities/movie_entity.dart';
 class FavoriteMoviesGrid extends StatelessWidget {
-  const FavoriteMoviesGrid({super.key});
+  final List<Movie> movies; // Movie entity listesi
 
-  // Gerçek veriler gelene kadar kullanılacak örnek filmler
-  static final List<_PlaceholderMovie> _placeholderMovies = [
-    _PlaceholderMovie('Aşk, Ekmek, Hayaller', 'Adam Yapım', 'https://placehold.co/400x600/222/fff?text=Film+1'),
-    _PlaceholderMovie('Gece Karanlık', 'Fox Studios', 'https://placehold.co/400x600/333/fff?text=Film+2'),
-    _PlaceholderMovie('Aşk, Ekmek, Hayaller', 'Adam Yapım', 'https://placehold.co/400x600/444/fff?text=Film+3'),
-    _PlaceholderMovie('Gece Karanlık', 'Fox Studios', 'https://placehold.co/400x600/555/fff?text=Film+4'),
-  ];
+  const FavoriteMoviesGrid({super.key, required this.movies});
 
   @override
   Widget build(BuildContext context) {
@@ -35,16 +21,16 @@ class FavoriteMoviesGrid extends StatelessWidget {
         const SizedBox(height: 16),
         GridView.builder(
           shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(), // Ana sayfayla birlikte scroll olması için
+          physics: const NeverScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // Yan yana 2 film
+            crossAxisCount: 2,
             crossAxisSpacing: 16,
             mainAxisSpacing: 16,
-            childAspectRatio: 0.65, // Kartların en-boy oranı
+            childAspectRatio: 0.65,
           ),
-          itemCount: _placeholderMovies.length,
+          itemCount: movies.length,
           itemBuilder: (context, index) {
-            final movie = _placeholderMovies[index];
+            final movie = movies[index];
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -52,16 +38,30 @@ class FavoriteMoviesGrid extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: Image.network(
-                      movie.imageUrl,
+                      movie.posterUrl,
                       fit: BoxFit.cover,
                       width: double.infinity,
+                      errorBuilder: (_, __, ___) => Container(
+                        color: Colors.grey[800],
+                        child: const Icon(Icons.movie, color: Colors.white),
+                      ),
                     ),
                   ),
                 ),
                 const SizedBox(height: 8),
-                Text(movie.title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                Text(
+                  movie.title,
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
                 const SizedBox(height: 4),
-                Text(movie.studio, style: TextStyle(color: Colors.grey.shade400, fontSize: 12)),
+                Text(
+                  movie.production,
+                  style: TextStyle(color: Colors.grey[400], fontSize: 12),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ],
             );
           },

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shartflix/domain/entities/movie_entity.dart';
+import 'package:shartflix/presentation/movie/bloc/movie_list_bloc.dart';
+import 'package:shartflix/presentation/movie/bloc/movie_list_event.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MovieDetailScreen extends StatefulWidget {
   final Movie initialMovie;
@@ -172,6 +175,10 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                     ),
                     onPressed: () {
                       // Favori işlemleri
+                     // Provider yerine BlocProvider kullan
+  BlocProvider.of<MovieListBloc>(context).add(ToggleFavorite(movie.id));
+  
+
                     },
                   ),
                 ),

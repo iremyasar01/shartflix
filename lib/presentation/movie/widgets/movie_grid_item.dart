@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shartflix/domain/entities/movie_entity.dart';
+import 'package:shartflix/presentation/movie/bloc/movie_list_bloc.dart';
+import 'package:shartflix/presentation/movie/bloc/movie_list_event.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MovieGridItem extends StatelessWidget {
   final Movie movie;
@@ -81,6 +84,8 @@ class MovieGridItem extends StatelessWidget {
                     ),
                     onPressed: () {
                       // Favori işlemleri
+                       context.read<MovieListBloc>().add(
+                      ToggleFavorite(movie.id));
                     },
                   ),
                 ],
