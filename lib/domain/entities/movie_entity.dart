@@ -4,6 +4,10 @@ class Movie {
   final String description;
   final String posterUrl;
   final bool isFavorite;
+  final String year;
+  final String director;
+  final String actors;
+  final String production; // Yeni eklenen alan
 
   Movie({
     required this.id,
@@ -11,13 +15,23 @@ class Movie {
     required this.description,
     required this.posterUrl,
     required this.isFavorite,
+    required this.year,
+    required this.director,
+    required this.actors,
+    required this.production, // Yeni eklenen alan
   });
+  
+  // Kopyalama metodu güncellendi
   Movie copyWith({
     String? id,
     String? title,
     String? description,
     String? posterUrl,
     bool? isFavorite,
+    String? year,
+    String? director,
+    String? actors,
+    String? production, // Yeni eklenen alan
   }) {
     return Movie(
       id: id ?? this.id,
@@ -25,9 +39,10 @@ class Movie {
       description: description ?? this.description,
       posterUrl: posterUrl ?? this.posterUrl,
       isFavorite: isFavorite ?? this.isFavorite,
+      year: year ?? this.year,
+      director: director ?? this.director,
+      actors: actors ?? this.actors,
+      production: production ?? this.production, // Yeni eklenen alan
     );
   }
-
-  //@override
- // List<Object?> get props => [id, title, description, posterUrl, isFavorite];
 }

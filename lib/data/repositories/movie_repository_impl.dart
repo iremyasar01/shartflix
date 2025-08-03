@@ -15,9 +15,8 @@ class MovieRepositoryImpl implements MovieRepository {
   @override
   Future<List<Movie>> getMovies(int page) async {
     final response = await remoteDataSource.getMovies(page);
-
     final favoriteIds = await localStorage.getFavoriteMovieIds();
-
+    
     return response.movies.map((model) {
       return Movie(
         id: model.id,
@@ -25,7 +24,12 @@ class MovieRepositoryImpl implements MovieRepository {
         description: model.description,
         posterUrl: model.posterUrl,
         isFavorite: favoriteIds.contains(model.id),
+        year: model.year,
+        director: model.director,
+        actors: model.actors,
+        production: model.production, // Yeni eklenen alan
       );
     }).toList();
   }
 }
+
