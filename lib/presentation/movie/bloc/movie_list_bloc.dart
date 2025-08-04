@@ -111,12 +111,6 @@ class MovieListBloc extends Bloc<MovieListEvent, MovieListState> {
         return movie;
       }).toList();
 
-      // Favori durumunu güncelle
-      if (updatedMovies.any((m) => m.id == event.movieId && m.isFavorite)) {
-        await localStorage.addFavoriteMovie(event.movieId);
-      } else {
-        await localStorage.removeFavoriteMovie(event.movieId);
-      }
       
       emit(state.copyWith(movies: updatedMovies));
     } catch (e) {

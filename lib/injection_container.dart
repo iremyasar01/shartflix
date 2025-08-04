@@ -38,7 +38,6 @@ void init() {
   sl.registerLazySingleton<MovieRepository>(
     () => MovieRepositoryImpl(
       remoteDataSource: sl(),
-      localStorage: sl(),
     ),
   );
 
