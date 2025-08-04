@@ -61,7 +61,8 @@ class ProfileHeader extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
             ),
           ),
-          child: const Text('Fotoğraf Ekle', style: TextStyle(color: Colors.white)),
+          child: const Text('Fotoğraf Ekle',
+              style: TextStyle(color: Colors.white)),
         ),
       ],
     );

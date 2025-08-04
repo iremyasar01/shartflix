@@ -58,13 +58,14 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                 width: double.infinity,
                 height: double.infinity,
                 fit: BoxFit.cover,
-                placeholder: (context, url) => Container(color: Colors.grey[900]),
+                placeholder: (context, url) =>
+                    Container(color: Colors.grey[900]),
                 errorWidget: (context, url, error) => Container(
                   color: Colors.grey[800],
                   child: const Center(child: Icon(Icons.movie, size: 50)),
                 ),
               ),
-              
+
               // Karanlık overlay
               Container(
                 decoration: BoxDecoration(
@@ -78,7 +79,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                   ),
                 ),
               ),
-              
+
               // Film detayları
               Positioned(
                 bottom: 100,
@@ -157,7 +158,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                   ],
                 ),
               ),
-              
+
               // Favori butonu
               Positioned(
                 top: 50,
@@ -175,15 +176,14 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                     ),
                     onPressed: () {
                       // Favori işlemleri
-                     // Provider yerine BlocProvider kullan
-  BlocProvider.of<MovieListBloc>(context).add(ToggleFavorite(movie.id));
-  
 
+                      BlocProvider.of<MovieListBloc>(context)
+                          .add(ToggleFavorite(movie.id));
                     },
                   ),
                 ),
               ),
-              
+
               // Sayfa belirteci
               Positioned(
                 bottom: 40,

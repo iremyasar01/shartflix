@@ -10,12 +10,10 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Arka plan rengini tasarıma uygun olarak ayarlıyoruz.
-      backgroundColor: const Color(0xFF101010),
       body: BlocProvider(
         create: (context) => LoginBloc(
           authService: AuthService(),
-          // storageService: StorageService(), // Token saklama servisini de burada provide edin.
+          //storageService: StorageService(), // Token saklama servisini de burada provide edin.
         ),
         child: const LoginForm(),
       ),

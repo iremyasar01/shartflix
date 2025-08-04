@@ -78,7 +78,7 @@ class LimitedOfferSheet extends StatelessWidget {
                 const SizedBox(height: 16),
 
                 // JETON PAKETLERİ
-               const Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     JetonCard(
@@ -132,6 +132,3 @@ class LimitedOfferSheet extends StatelessWidget {
     );
   }
 }
-
-
-

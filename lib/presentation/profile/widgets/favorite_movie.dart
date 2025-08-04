@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shartflix/domain/entities/movie_entity.dart';
 class FavoriteMoviesGrid extends StatelessWidget {
-  final List<Movie> movies; // Movie entity listesi
+  final List<Movie> movies; 
 
   const FavoriteMoviesGrid({super.key, required this.movies});
 

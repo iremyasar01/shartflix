@@ -7,7 +7,7 @@ class Movie {
   final String year;
   final String director;
   final String actors;
-  final String production; // Yeni eklenen alan
+  final String production; 
 
   Movie({
     required this.id,
@@ -18,10 +18,10 @@ class Movie {
     required this.year,
     required this.director,
     required this.actors,
-    required this.production, // Yeni eklenen alan
+    required this.production, 
   });
   
-  // Kopyalama metodu güncellendi
+  
   Movie copyWith({
     String? id,
     String? title,
@@ -31,7 +31,7 @@ class Movie {
     String? year,
     String? director,
     String? actors,
-    String? production, // Yeni eklenen alan
+    String? production, 
   }) {
     return Movie(
       id: id ?? this.id,
@@ -42,7 +42,7 @@ class Movie {
       year: year ?? this.year,
       director: director ?? this.director,
       actors: actors ?? this.actors,
-      production: production ?? this.production, // Yeni eklenen alan
+      production: production ?? this.production, 
     );
   }
 }

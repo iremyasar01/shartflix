@@ -22,8 +22,9 @@ class AgreementCheckbox extends StatelessWidget {
               height: 24,
               child: Checkbox(
                 value: state.isAgreed,
-                onChanged: (value) =>
-                    context.read<RegisterBloc>().add(RegisterAgreementChanged(value ?? false)),
+                onChanged: (value) => context
+                    .read<RegisterBloc>()
+                    .add(RegisterAgreementChanged(value ?? false)),
                 checkColor: Colors.black,
                 activeColor: Colors.white,
                 side: const BorderSide(color: Colors.white),
@@ -39,10 +40,11 @@ class AgreementCheckbox extends StatelessWidget {
                     TextSpan(
                       text: 'okudum ve kabul ediyorum.',
                       style: const TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                        
                           LogService.i('Kullanıcı sözleşmesi tıklandı.');
                         },
                     ),

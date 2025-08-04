@@ -38,7 +38,7 @@ class MovieListBloc extends Bloc<MovieListEvent, MovieListState> {
       emit(state.copyWith(
         movies: movies,
         currentPage: 1,
-        totalPages: 10, // API'dan gelen toplam sayfa sayısı
+        totalPages: 4, 
         isLoading: false,
       ));
     } catch (e) {

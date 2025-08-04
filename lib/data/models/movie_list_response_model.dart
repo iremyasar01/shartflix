@@ -11,14 +11,3 @@ class MovieListResponseModel {
     required this.currentPage,
   });
 }
- /* factory MovieListResponseModel.fromJson(Map<String, dynamic> json) {
-    return MovieListResponseModel(
-      movies: (json['movies'] as List)
-          .map((e) => MovieModel.fromJson(e))
-          .toList(),
-      totalPages: json['totalPages'],
-      currentPage: json['currentPage'],
-    );
-  }
-}
-*/

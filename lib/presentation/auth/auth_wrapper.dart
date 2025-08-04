@@ -22,7 +22,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
     // Hafızadan token'ı oku
     final token = await StorageService().getToken();
 
-    // Bu widget'ın hala "ağaçta" olup olmadığını kontrol et (önemli!)
+    
     if (!mounted) return;
 
     if (token != null) {

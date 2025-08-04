@@ -42,7 +42,7 @@ class MovieModel {
       year: json['Year'] ?? '',
       director: json['Director'] ?? '',
       actors: json['Actors'] ?? '',
-      production: json['Production'] ?? 'Unknown Production', // Yeni eklenen alan
+      production: json['Production'] ?? 'Unknown Production', 
     );
   }
 }

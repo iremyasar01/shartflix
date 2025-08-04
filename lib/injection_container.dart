@@ -13,23 +13,21 @@ final GetIt sl = GetIt.instance;
 
 void init() {
   // Dio instance (HTTP client)
-  sl.registerLazySingleton<Dio>(() => Dio(
-        BaseOptions(
-          baseUrl: 'https://caseapi.servicelabs.tech',
-          connectTimeout: const Duration(seconds: 15),
-          receiveTimeout: const Duration(seconds: 15),
-        ),
-      )..interceptors.addAll([
-      LogInterceptor(requestBody: true, responseBody: true),
-      AuthInterceptor(sl<StorageService>()), // Yeni eklediğimiz interceptor
-    ]),
-    );
-  
-        
+  sl.registerLazySingleton<Dio>(
+    () => Dio(
+      BaseOptions(
+        baseUrl: 'https://caseapi.servicelabs.tech',
+        connectTimeout: const Duration(seconds: 15),
+        receiveTimeout: const Duration(seconds: 15),
+      ),
+    )..interceptors.addAll([
+        LogInterceptor(requestBody: true, responseBody: true),
+        AuthInterceptor(sl<StorageService>()), // Yeni eklediğimiz interceptor
+      ]),
+  );
 
-  // Storage Service 
+  // Storage Service
   sl.registerLazySingleton<StorageService>(() => StorageService());
-  
 
   // Movie Data Source
   sl.registerLazySingleton<MovieRemoteDataSource>(
@@ -40,7 +38,7 @@ void init() {
   sl.registerLazySingleton<MovieRepository>(
     () => MovieRepositoryImpl(
       remoteDataSource: sl(),
-      localStorage: sl(), 
+      localStorage: sl(),
     ),
   );
 
@@ -49,5 +47,4 @@ void init() {
   sl.registerLazySingleton<ProfileRepository>(
     () => ProfileRepositoryImpl(profileService: sl()),
   );
-  
 }

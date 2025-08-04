@@ -28,7 +28,6 @@ class _SplashScreenState extends State<SplashScreen> {
     // Sonuçlardan token'ı alalım (ikinci işlemin sonucuydu).
     final String? token = results[1] as String?;
 
-    // --- EN GÜVENLİ YÖNTEM ---
     // Bütün beklemeler bittikten sonra, context'i kullanmadan HEMEN ÖNCE
     // widget'ın hala ekranda olup olmadığını kontrol et.
     if (mounted) {
@@ -50,7 +49,6 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Resminizin çalıştığından emin olmak için assets klasörünüzü kontrol edin.
             Image.asset('assets/images/SinFlixSplash.png', width: 200),
             const SizedBox(height: 24),
             CircularProgressIndicator(

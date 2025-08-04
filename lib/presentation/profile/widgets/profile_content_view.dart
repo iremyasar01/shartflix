@@ -23,11 +23,11 @@ class ProfileContentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Repository'yi context'ten al
-    final movieRepository = Provider.of<MovieRepository>(context, listen: false);
-    
+    final movieRepository =
+        Provider.of<MovieRepository>(context, listen: false);
+
     return FutureBuilder<List<Movie>>(
-      future: movieRepository.getFavoriteMovies(), // Statik olmayan çağrı
+      future: movieRepository.getFavoriteMovies(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -38,8 +38,9 @@ class ProfileContentView extends StatelessWidget {
         }
 
         final favoriteMovies = snapshot.data ?? [];
-        print('Favori filmler UI\'ya aktarılıyor: ${favoriteMovies.length} film');
-        
+        print(
+            'Favori filmler UI\'ya aktarılıyor: ${favoriteMovies.length} film');
+
         return CustomScrollView(
           slivers: [
             SliverAppBar(
@@ -48,14 +49,16 @@ class ProfileContentView extends StatelessWidget {
                 icon: const Icon(Icons.arrow_back, color: Colors.white),
                 onPressed: () => Navigator.pop(context),
               ),
-              title: const Text('Profil Detayı', style: TextStyle(color: Colors.white)),
+              title: const Text('Profil Detayı',
+                  style: TextStyle(color: Colors.white)),
               actions: [
                 Padding(
                   padding: const EdgeInsets.only(right: 16.0),
                   child: GestureDetector(
                     onTap: () => _showLimitedOfferSheet(context),
                     child: Chip(
-                      avatar: const Icon(Icons.diamond, color: Colors.white, size: 16),
+                      avatar: const Icon(Icons.diamond,
+                          color: Colors.white, size: 16),
                       label: const Text('Sınırlı Teklif'),
                       backgroundColor: Colors.red.shade700,
                       labelStyle: const TextStyle(color: Colors.white),
@@ -75,7 +78,7 @@ class ProfileContentView extends StatelessWidget {
                       children: [
                         ProfileHeader(user: user),
                         const SizedBox(height: 32),
-                        FavoriteMoviesGrid(movies: favoriteMovies), // Favorileri geç
+                        FavoriteMoviesGrid(movies: favoriteMovies),
                       ],
                     ),
                   ),

@@ -27,7 +27,7 @@ class RegisterState extends Equatable {
   // Tüm alanlar dolu, şifre en az 6 karakter, şifreler eşleşiyor ve sözleşme kabul edilmiş olmalı.
   bool get isValid =>
       name.isNotEmpty &&
-      email.contains('@') && // Basit bir e-posta format kontrolü
+      email.contains('@') && 
       password.length >= 6 &&
       passwordsMatch &&
       isAgreed;

@@ -19,7 +19,7 @@ class AuthService {
         throw Exception('Geçersiz yanıt formatı');
       }
 
-      // --- DEĞİŞİKLİK BURADA: 'data' kutusunun içine bakıyoruz ---
+      
       final String? token = responseData['data']?['token']?.toString();
 
       if (token == null || token.isEmpty) {

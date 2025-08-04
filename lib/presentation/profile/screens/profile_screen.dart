@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shartflix/domain/repositories/profile_repository.dart';
 import 'package:shartflix/presentation/profile/bloc/profile_bloc.dart';
-import 'package:shartflix/presentation/profile/widgets/profile_content_view.dart'; 
+import 'package:shartflix/presentation/profile/widgets/profile_content_view.dart';
 
 class ProfileScreen extends StatelessWidget {
-final String? token;
+  final String? token;
 
-const ProfileScreen({super.key, required this.token});
-
+  const ProfileScreen({super.key, required this.token});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +16,6 @@ const ProfileScreen({super.key, required this.token});
         repository: context.read<ProfileRepository>(),
       )..add(LoadProfileEvent()),
       child: Scaffold(
-        //backgroundColor: Colors.black, // Arka planı tasarıma uygun hale getir
         body: BlocConsumer<ProfileBloc, ProfileState>(
           listener: (context, state) {
             if (state is ProfileErrorState) {
@@ -36,7 +34,8 @@ const ProfileScreen({super.key, required this.token});
             }
             // Diğer tüm durumlarda (yükleniyor, hata, başlangıç)
             // bir yüklenme animasyonu göster.
-            return const Center(child: CircularProgressIndicator(color: Colors.white));
+            return const Center(
+                child: CircularProgressIndicator(color: Colors.white));
           },
         ),
       ),

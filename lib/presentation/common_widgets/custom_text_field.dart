@@ -13,7 +13,7 @@ class CustomTextField extends StatelessWidget {
   final ValueChanged<String> onChanged;
   final TextInputType? keyboardType;
   
-  // Şifre alanı için opsiyonel parametreler
+
   final bool isObscured;
   final VoidCallback? onVisibilityToggle;
   final String? Function(RegisterState)? errorTextSelector;

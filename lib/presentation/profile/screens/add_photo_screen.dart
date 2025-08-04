@@ -133,7 +133,8 @@ class _AddPhotoScreenState extends State<AddPhotoScreen> {
             : widget.user.photoUrl != null && widget.user.photoUrl!.isNotEmpty
                 ? ClipRRect(
                     borderRadius: BorderRadius.circular(16),
-                    child: Image.network(widget.user.photoUrl!, fit: BoxFit.cover),
+                    child:
+                        Image.network(widget.user.photoUrl!, fit: BoxFit.cover),
                   )
                 : const Center(
                     child: Icon(Icons.add, color: Colors.white54, size: 40),

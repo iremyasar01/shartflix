@@ -4,7 +4,7 @@ part of 'login_bloc.dart';
 class LoginState extends Equatable {
   final String email;
   final String password;
-  final FormStatus status; // <-- Artık merkezi enum'u kullanıyor
+  final FormStatus status; 
   final String? errorMessage;
 
   const LoginState({
