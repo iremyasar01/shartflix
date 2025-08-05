@@ -6,8 +6,6 @@ import 'package:shartflix/domain/entities/movie_entity.dart';
 import 'package:shartflix/domain/repositories/movie_repository.dart';
 import 'package:shartflix/presentation/movie/bloc/movie_list_event.dart';
 
-
-
 part 'movie_list_state.dart';
 
 class MovieListBloc extends Bloc<MovieListEvent, MovieListState> {
@@ -31,7 +29,7 @@ class MovieListBloc extends Bloc<MovieListEvent, MovieListState> {
   ) async {
     if (state.isLoading) return;
     
-    emit(state.copyWith(isLoading: true));
+    emit(state.copyWith(isLoading: true, error: null));
     
     try {
       final movies = await movieRepository.getMovies(1);
@@ -40,6 +38,7 @@ class MovieListBloc extends Bloc<MovieListEvent, MovieListState> {
         currentPage: 1,
         totalPages: 4, 
         isLoading: false,
+        error: null,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -57,7 +56,7 @@ class MovieListBloc extends Bloc<MovieListEvent, MovieListState> {
         state.currentPage >= state.totalPages || 
         state.isLoading) return;
     
-    emit(state.copyWith(isLoadMore: true));
+    emit(state.copyWith(isLoadMore: true, error: null));
     
     try {
       final nextPage = state.currentPage + 1;
@@ -69,6 +68,7 @@ class MovieListBloc extends Bloc<MovieListEvent, MovieListState> {
         movies: allMovies,
         currentPage: nextPage,
         isLoadMore: false,
+        error: null,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -82,7 +82,7 @@ class MovieListBloc extends Bloc<MovieListEvent, MovieListState> {
     RefreshMovies event,
     Emitter<MovieListState> emit,
   ) async {
-    emit(state.copyWith(isRefreshing: true));
+    emit(state.copyWith(isRefreshing: true, error: null));
     
     try {
       final movies = await movieRepository.getMovies(1);
@@ -90,6 +90,7 @@ class MovieListBloc extends Bloc<MovieListEvent, MovieListState> {
         movies: movies,
         currentPage: 1,
         isRefreshing: false,
+        error: null,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -103,19 +104,58 @@ class MovieListBloc extends Bloc<MovieListEvent, MovieListState> {
     ToggleFavorite event,
     Emitter<MovieListState> emit,
   ) async {
+    // Önce mevcut movie'yi bul
+    final currentMovie = state.movies.firstWhere(
+      (movie) => movie.id == event.movieId,
+      orElse: () => throw Exception('Film bulunamadı'),
+    );
+
     try {
-      final updatedMovies = state.movies.map((movie) {
+      print('Toggle favorite için movie bulundu: ${currentMovie.title}');
+      
+      // Optimistic UI Update - kullanıcıya anında geri bildirim
+      final newFavoriteStatus = !currentMovie.isFavorite;
+      final optimisticMovies = state.movies.map((movie) {
         if (movie.id == event.movieId) {
-          return movie.copyWith(isFavorite: !movie.isFavorite);
+          return movie.copyWith(isFavorite: newFavoriteStatus);
         }
         return movie;
       }).toList();
 
+      emit(state.copyWith(movies: optimisticMovies));
+
+      // API çağrısını yap
+      await movieRepository.toggleFavorite(event.movieId);
       
-      emit(state.copyWith(movies: updatedMovies));
+      // API başarılı oldu, optimistic update'i koru
+      print('Favori toggle işlemi başarılı - Movie: ${currentMovie.title}, Yeni durum: $newFavoriteStatus');
+      
+      // İsteğe bağlı: Başarılı işlem sonrası güncel movie bilgisini al
+      // Bu durumda optimistic update'i koruyoruz çünkü API'den tam bilgi gelmeyebilir
+      final finalMovies = state.movies.map((movie) {
+        if (movie.id == event.movieId) {
+          return currentMovie.copyWith(isFavorite: newFavoriteStatus);
+        }
+        return movie;
+      }).toList();
+
+      emit(state.copyWith(movies: finalMovies, error: null));
+      
     } catch (e) {
-      // Hata durumunda eski state'i koru
-      emit(state);
+      print('Toggle favorite hatası: $e');
+      
+      // Hata durumunda eski durumu geri yükle
+      final revertedMovies = state.movies.map((movie) {
+        if (movie.id == event.movieId) {
+          return currentMovie; // Orijinal movie nesnesini geri yükle
+        }
+        return movie;
+      }).toList();
+
+      emit(state.copyWith(
+        movies: revertedMovies,
+        error: 'Favori durumu güncellenemedi: ${e.toString()}',
+      ));
     }
   }
 }

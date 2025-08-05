@@ -7,7 +7,7 @@ class Movie {
   final String year;
   final String director;
   final String actors;
-  final String production; 
+  final String production;
 
   Movie({
     required this.id,
@@ -18,10 +18,10 @@ class Movie {
     required this.year,
     required this.director,
     required this.actors,
-    required this.production, 
+    required this.production,
   });
-  
-  
+
+  // copyWith metodunu ekleyin (eğer yoksa)
   Movie copyWith({
     String? id,
     String? title,
@@ -31,7 +31,7 @@ class Movie {
     String? year,
     String? director,
     String? actors,
-    String? production, 
+    String? production,
   }) {
     return Movie(
       id: id ?? this.id,
@@ -42,7 +42,21 @@ class Movie {
       year: year ?? this.year,
       director: director ?? this.director,
       actors: actors ?? this.actors,
-      production: production ?? this.production, 
+      production: production ?? this.production,
     );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is Movie && other.id == id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
+
+  @override
+  String toString() {
+    return 'Movie(id: $id, title: $title, isFavorite: $isFavorite)';
   }
 }
