@@ -18,17 +18,12 @@ class MovieGridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MovieListBloc, MovieListState>(
-      // Bu widget sadece ilgili movie değiştiğinde rebuild olsun
-      buildWhen: (previous, current) {
-        final previousMovie = previous.movies.where((m) => m.id == movie.id).firstOrNull;
-        final currentMovie = current.movies.where((m) => m.id == movie.id).firstOrNull;
-        
-        // Movie'nin favorite durumu değişti mi kontrol et
-        return previousMovie?.isFavorite != currentMovie?.isFavorite;
-      },
       builder: (context, state) {
         // State'den güncel movie'yi al
-        final currentMovie = state.movies.where((m) => m.id == movie.id).firstOrNull ?? movie;
+        final currentMovie = state.movies.firstWhere(
+          (m) => m.id == movie.id,
+          orElse: () => movie,
+        );
         
         return GestureDetector(
           onTap: onTap,
@@ -96,7 +91,7 @@ class MovieGridItem extends StatelessWidget {
                           size: 20,
                         ),
                         onPressed: () {
-                          print('Favori butonu basıldı - Movie: ${currentMovie.title}, Current: ${currentMovie.isFavorite}');
+                          print('Favori butonu basıldı - Movie: ${currentMovie.title}, ID: ${currentMovie.id}, Current: ${currentMovie.isFavorite}');
                           
                           // Favori işlemini tetikle
                           context.read<MovieListBloc>().add(

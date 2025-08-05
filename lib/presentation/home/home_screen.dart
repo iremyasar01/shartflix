@@ -86,101 +86,104 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildHomePageBody() {
-    return BlocProvider.value(
-      value: _movieListBloc,
-      child: BlocBuilder<MovieListBloc, MovieListState>(
-        builder: (context, state) {
-          if (state.isLoading && state.movies.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
-          }
+    return BlocBuilder<MovieListBloc, MovieListState>(
+      builder: (context, state) {
+        if (state.isLoading && state.movies.isEmpty) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-          if (state.error != null) {
-            return Center(child: Text('Hata: ${state.error}'));
-          }
+        if (state.error != null) {
+          return Center(child: Text('Hata: ${state.error}'));
+        }
 
-          return RefreshIndicator(
-            onRefresh: () async {
-              _movieListBloc.add(RefreshMovies());
-            },
-            child: CustomScrollView(
-              controller: _scrollController,
-              slivers: [
-                SliverPadding(
-                  padding: const EdgeInsets.all(16),
-                  sliver: SliverGrid(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 0.7,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                    ),
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        if (index < state.movies.length) {
-                          return MovieGridItem(
-                            movie: state.movies[index],
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => MovieDetailScreen(
+        return RefreshIndicator(
+          onRefresh: () async {
+            _movieListBloc.add(RefreshMovies());
+          },
+          child: CustomScrollView(
+            controller: _scrollController,
+            slivers: [
+              SliverPadding(
+                padding: const EdgeInsets.all(16),
+                sliver: SliverGrid(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 0.7,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      if (index < state.movies.length) {
+                        return MovieGridItem(
+                          movie: state.movies[index],
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => BlocProvider.value(
+                                  value: _movieListBloc,
+                                  child: MovieDetailScreen(
                                     initialMovie: state.movies[index],
                                     allMovies: state.movies,
                                   ),
                                 ),
-                              );
-                            },
-                          );
-                        }
-                        return null;
-                      },
-                      childCount: state.movies.length + (state.isLoadMore ? 1 : 0),
-                    ),
+                              ),
+                            );
+                          },
+                        );
+                      }
+                      return null;
+                    },
+                    childCount: state.movies.length + (state.isLoadMore ? 1 : 0),
                   ),
                 ),
+              ),
 
-                // Yükleniyor gösterge (sonsuz kaydırma için)
-                if (state.isLoadMore)
-                  const SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Center(child: CircularProgressIndicator()),
-                    ),
+              // Yükleniyor gösterge (sonsuz kaydırma için)
+              if (state.isLoadMore)
+                const SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Center(child: CircularProgressIndicator()),
                   ),
-              ],
-            ),
-          );
-        },
-      ),
+                ),
+            ],
+          ),
+        );
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _selectedIndex == 0
-          ? AppBar(
-              title: const Text('Ana Sayfa'),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.logout),
-                  onPressed: _logout,
-                ),
-              ],
-              automaticallyImplyLeading: false,
-            )
-          : null,
-      
-      body: _pages.isEmpty
-          ? const Center(child: CircularProgressIndicator())
-          : IndexedStack(
-              index: _selectedIndex,
-              children: _pages,
-            ),
-      
-      bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+    return BlocProvider.value(
+      value: _movieListBloc,
+      child: Scaffold(
+        appBar: _selectedIndex == 0
+            ? AppBar(
+                title: const Text('Ana Sayfa'),
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.logout),
+                    onPressed: _logout,
+                  ),
+                ],
+                automaticallyImplyLeading: false,
+              )
+            : null,
+        
+        body: _pages.isEmpty
+            ? const Center(child: CircularProgressIndicator())
+            : IndexedStack(
+                index: _selectedIndex,
+                children: _pages,
+              ),
+        
+        bottomNavigationBar: CustomBottomNavBar(
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+        ),
       ),
     );
   }

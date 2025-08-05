@@ -39,174 +39,185 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView.builder(
-        controller: _pageController,
-        scrollDirection: Axis.vertical,
-        itemCount: widget.allMovies.length,
-        onPageChanged: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        itemBuilder: (context, index) {
-          final movie = widget.allMovies[index];
-          return Stack(
-            children: [
-              // Film posterı arka plan
-              CachedNetworkImage(
-                imageUrl: movie.posterUrl,
-                width: double.infinity,
-                height: double.infinity,
-                fit: BoxFit.cover,
-                placeholder: (context, url) =>
-                    Container(color: Colors.grey[900]),
-                errorWidget: (context, url, error) => Container(
-                  color: Colors.grey[800],
-                  child: const Center(child: Icon(Icons.movie, size: 50)),
-                ),
-              ),
-
-              // Karanlık overlay
-              Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.black.withOpacity(0.3),
-                      Colors.black.withOpacity(0.7),
-                    ],
+      body: BlocBuilder<MovieListBloc, MovieListState>(
+        builder: (context, state) {
+          return PageView.builder(
+            controller: _pageController,
+            scrollDirection: Axis.vertical,
+            itemCount: widget.allMovies.length,
+            onPageChanged: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+            itemBuilder: (context, index) {
+              // State'den güncel movie'yi al
+              final movie = state.movies.firstWhere(
+                (m) => m.id == widget.allMovies[index].id,
+                orElse: () => widget.allMovies[index],
+              );
+              
+              return Stack(
+                children: [
+                  // Film posterı arka plan
+                  CachedNetworkImage(
+                    imageUrl: movie.posterUrl,
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) =>
+                        Container(color: Colors.grey[900]),
+                    errorWidget: (context, url, error) => Container(
+                      color: Colors.grey[800],
+                      child: const Center(child: Icon(Icons.movie, size: 50)),
+                    ),
                   ),
-                ),
-              ),
 
-              // Film detayları
-              Positioned(
-                bottom: 100,
-                left: 20,
-                right: 20,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      movie.title,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                  // Karanlık overlay
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.black.withOpacity(0.3),
+                          Colors.black.withOpacity(0.7),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    Text(
-                      movie.year,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey[300],
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      "Yönetmen",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      movie.director,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 15),
-                    const Text(
-                      "Oyuncular",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      movie.actors,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      "Konu",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      movie.description,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        height: 1.5,
-                      ),
-                      maxLines: 4,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-
-              // Favori butonu
-              Positioned(
-                top: 50,
-                right: 20,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.5),
-                    shape: BoxShape.circle,
                   ),
-                  child: IconButton(
-                    icon: Icon(
-                      movie.isFavorite ? Icons.favorite : Icons.favorite_border,
-                      color: movie.isFavorite ? Colors.red : Colors.white,
-                      size: 30,
+
+                  // Film detayları
+                  Positioned(
+                    bottom: 100,
+                    left: 20,
+                    right: 20,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          movie.title,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          movie.year,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[300],
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        const Text(
+                          "Yönetmen",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          movie.director,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
+                        ),
+                        const SizedBox(height: 15),
+                        const Text(
+                          "Oyuncular",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          movie.actors,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        const Text(
+                          "Konu",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          movie.description,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            height: 1.5,
+                          ),
+                          maxLines: 4,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ),
-                    onPressed: () {
-                      // Favori işlemleri
-
-                      BlocProvider.of<MovieListBloc>(context)
-                          .add(ToggleFavorite(movie.id));
-                    },
                   ),
-                ),
-              ),
 
-              // Sayfa belirteci
-              Positioned(
-                bottom: 40,
-                left: 0,
-                right: 0,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(5, (i) {
-                    return Container(
-                      width: 8,
-                      height: 8,
-                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                  // Favori butonu
+                  Positioned(
+                    top: 50,
+                    right: 20,
+                    child: Container(
                       decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.5),
                         shape: BoxShape.circle,
-                        color: i == _currentIndex % 5
-                            ? Colors.blue
-                            : Colors.grey[300],
                       ),
-                    );
-                  }),
-                ),
-              ),
-            ],
+                      child: IconButton(
+                        icon: Icon(
+                          movie.isFavorite ? Icons.favorite : Icons.favorite_border,
+                          color: movie.isFavorite ? Colors.red : Colors.white,
+                          size: 30,
+                        ),
+                        onPressed: () {
+                          print('MovieDetailScreen - Favori butonu basıldı: ${movie.title}, isFavorite: ${movie.isFavorite}');
+                          
+                          // Favori işlemleri
+                          context.read<MovieListBloc>().add(
+                            ToggleFavorite(movie.id)
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+
+                  // Sayfa belirteci
+                  Positioned(
+                    bottom: 40,
+                    left: 0,
+                    right: 0,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(5, (i) {
+                        return Container(
+                          width: 8,
+                          height: 8,
+                          margin: const EdgeInsets.symmetric(horizontal: 4),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: i == _currentIndex % 5
+                                ? Colors.blue
+                                : Colors.grey[300],
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
+                ],
+              );
+            },
           );
         },
       ),
