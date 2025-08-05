@@ -1,4 +1,3 @@
-import 'package:shartflix/core/utils/storage_service.dart';
 import 'package:shartflix/data/datasources/movie_remote_data_source.dart';
 import 'package:shartflix/domain/entities/movie_entity.dart';
 import 'package:shartflix/domain/repositories/movie_repository.dart';
